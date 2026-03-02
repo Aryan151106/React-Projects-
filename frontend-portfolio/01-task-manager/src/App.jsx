@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import './App.css'
+import './index.css'
 
 // Task Manager with Authentication, Kanban Board, Drag & Drop, CRUD
 
@@ -70,7 +70,6 @@ function App() {
       setUser(newUser)
       setIsAuthenticated(true)
     } else {
-      // Simple login simulation
       const savedUser = localStorage.getItem('taskmanager_user')
       if (savedUser) {
         const userData = JSON.parse(savedUser)
@@ -120,7 +119,6 @@ function App() {
     if (!taskForm.title.trim()) return
 
     if (editingTask) {
-      // Update existing task
       setTasks(prev => {
         const newTasks = { ...prev }
         for (const column in newTasks) {
@@ -131,7 +129,6 @@ function App() {
         return newTasks
       })
     } else {
-      // Create new task
       const newTask = {
         id: Date.now(),
         ...taskForm,
@@ -167,9 +164,7 @@ function App() {
 
     setTasks(prev => {
       const updated = { ...prev }
-      // Remove from source
       updated[draggedFrom] = updated[draggedFrom].filter(t => t.id !== draggedTask.id)
-      // Add to target
       updated[targetColumn] = [...updated[targetColumn], draggedTask]
       return updated
     })
@@ -186,63 +181,66 @@ function App() {
   // Auth Screen
   if (!isAuthenticated) {
     return (
-      <div className="auth-container">
-        <div className="auth-card">
-          <div className="auth-header">
-            <h1>TaskFlow</h1>
-            <p>Organize your work, boost productivity</p>
+      <div className="min-h-screen flex items-center justify-center p-5">
+        <div className="w-full max-w-[420px] bg-bg-glass backdrop-blur-[20px] border border-border rounded-2xl p-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold gradient-text mb-2">TaskFlow</h1>
+            <p className="text-text-secondary text-[0.95rem]">Organize your work, boost productivity</p>
           </div>
 
-          <div className="auth-tabs">
+          <div className="flex gap-2 mb-7 bg-black/20 p-1 rounded-lg">
             <button
-              className={authMode === 'login' ? 'active' : ''}
+              className={`flex-1 py-3 border-none text-[0.95rem] font-medium cursor-pointer rounded-md transition-all duration-300 ${authMode === 'login' ? 'bg-accent-blue text-white' : 'bg-transparent text-text-secondary hover:text-text-primary'}`}
               onClick={() => setAuthMode('login')}
             >
               Sign In
             </button>
             <button
-              className={authMode === 'register' ? 'active' : ''}
+              className={`flex-1 py-3 border-none text-[0.95rem] font-medium cursor-pointer rounded-md transition-all duration-300 ${authMode === 'register' ? 'bg-accent-blue text-white' : 'bg-transparent text-text-secondary hover:text-text-primary'}`}
               onClick={() => setAuthMode('register')}
             >
               Sign Up
             </button>
           </div>
 
-          <form onSubmit={handleAuth} className="auth-form">
+          <form onSubmit={handleAuth} className="flex flex-col gap-5">
             {authMode === 'register' && (
-              <div className="form-group">
-                <label>Full Name</label>
+              <div className="flex flex-col gap-2">
+                <label className="text-[0.85rem] font-medium text-text-secondary">Full Name</label>
                 <input
                   type="text"
                   value={authForm.name}
                   onChange={(e) => setAuthForm(p => ({ ...p, name: e.target.value }))}
                   placeholder="John Doe"
                   required
+                  className="w-full py-3.5 px-4 bg-black/30 border border-border rounded-lg text-text-primary text-base font-[inherit] transition-all duration-300 focus:outline-none focus:border-accent-blue focus:shadow-[0_0_0_3px_rgba(99,102,241,0.2)] placeholder:text-white/30"
                 />
               </div>
             )}
-            <div className="form-group">
-              <label>Email</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-[0.85rem] font-medium text-text-secondary">Email</label>
               <input
                 type="email"
                 value={authForm.email}
                 onChange={(e) => setAuthForm(p => ({ ...p, email: e.target.value }))}
                 placeholder="you@example.com"
                 required
+                className="w-full py-3.5 px-4 bg-black/30 border border-border rounded-lg text-text-primary text-base font-[inherit] transition-all duration-300 focus:outline-none focus:border-accent-blue focus:shadow-[0_0_0_3px_rgba(99,102,241,0.2)] placeholder:text-white/30"
               />
             </div>
-            <div className="form-group">
-              <label>Password</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-[0.85rem] font-medium text-text-secondary">Password</label>
               <input
                 type="password"
                 value={authForm.password}
                 onChange={(e) => setAuthForm(p => ({ ...p, password: e.target.value }))}
                 placeholder="••••••••"
                 required
+                className="w-full py-3.5 px-4 bg-black/30 border border-border rounded-lg text-text-primary text-base font-[inherit] transition-all duration-300 focus:outline-none focus:border-accent-blue focus:shadow-[0_0_0_3px_rgba(99,102,241,0.2)] placeholder:text-white/30"
               />
             </div>
-            {authError && <div className="auth-error">{authError}</div>}
-            <button type="submit" className="auth-submit">
+            {authError && <div className="bg-accent-red/15 border border-accent-red text-accent-red p-3 rounded-lg text-[0.9rem] text-center">{authError}</div>}
+            <button type="submit" className="p-4 gradient-btn border-none rounded-lg text-white text-base font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(99,102,241,0.4)]">
               {authMode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
           </form>
@@ -265,72 +263,72 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="header">
-        <div className="header-left">
-          <h1>TaskFlow</h1>
-          <span className="tagline">Kanban Board</span>
+      <header className="flex max-md:flex-col justify-between items-center p-4 px-8 max-md:px-4 max-md:gap-4 bg-bg-glass backdrop-blur-[10px] border-b border-border">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold gradient-text">TaskFlow</h1>
+          <span className="text-[0.85rem] text-text-secondary py-1 px-3 bg-accent-blue/15 rounded-full">Kanban Board</span>
         </div>
-        <div className="header-right">
-          <span className="user-greeting">Welcome, {user?.name || 'User'}</span>
-          <button className="btn-add" onClick={() => openModal()}>
+        <div className="flex items-center gap-4 max-md:w-full max-md:justify-center max-md:flex-wrap">
+          <span className="text-text-secondary text-[0.9rem]">Welcome, {user?.name || 'User'}</span>
+          <button className="py-2.5 px-5 gradient-btn border-none rounded-lg text-white text-[0.9rem] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(99,102,241,0.4)]" onClick={() => openModal()}>
             + New Task
           </button>
-          <button className="btn-logout" onClick={handleLogout}>
+          <button className="py-2.5 px-4 bg-transparent border border-border rounded-lg text-text-secondary text-[0.9rem] cursor-pointer transition-all duration-300 hover:bg-accent-red/10 hover:border-accent-red hover:text-accent-red" onClick={handleLogout}>
             Logout
           </button>
         </div>
       </header>
 
       {/* Kanban Board */}
-      <main className="board">
+      <main className="grid grid-cols-3 max-md:grid-cols-1 gap-6 p-8 max-md:p-4 flex-1 overflow-x-auto">
         {columns.map(column => (
           <div
             key={column.id}
-            className="column"
+            className="bg-bg-glass backdrop-blur-[10px] border border-border rounded-2xl flex flex-col min-h-[400px] max-md:min-h-[300px]"
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(column.id)}
           >
-            <div className="column-header" style={{ borderColor: column.color }}>
-              <span className="column-emoji">{column.emoji}</span>
-              <h2>{column.title}</h2>
-              <span className="task-count">{tasks[column.id].length}</span>
+            <div className="flex items-center gap-2.5 p-5 border-b border-border border-t-[3px] rounded-t-2xl" style={{ borderTopColor: column.color }}>
+              <span className="text-xl">{column.emoji}</span>
+              <h2 className="text-base font-semibold flex-1">{column.title}</h2>
+              <span className="bg-white/10 py-1 px-2.5 rounded-full text-[0.85rem] font-semibold text-text-secondary">{tasks[column.id].length}</span>
             </div>
-            <div className="column-content">
+            <div className="p-4 flex-1 flex flex-col gap-3 overflow-y-auto">
               {tasks[column.id].map(task => (
                 <div
                   key={task.id}
-                  className={`task-card ${draggedTask?.id === task.id ? 'dragging' : ''}`}
+                  className={`bg-bg-secondary border border-border rounded-lg p-4 cursor-grab transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)] hover:border-accent-blue group ${draggedTask?.id === task.id ? 'opacity-50 rotate-[3deg]' : ''}`}
                   draggable
                   onDragStart={() => handleDragStart(task, column.id)}
                   onDragEnd={handleDragEnd}
                 >
-                  <div className="task-header">
+                  <div className="flex justify-between items-start mb-2.5">
                     <span
-                      className="priority-badge"
+                      className="py-1 px-2.5 rounded-xl text-[0.7rem] font-semibold uppercase text-white"
                       style={{ backgroundColor: priorityColors[task.priority] }}
                     >
                       {task.priority}
                     </span>
-                    <div className="task-actions">
-                      <button onClick={() => openModal(task)} title="Edit">✏️</button>
-                      <button onClick={() => handleDeleteTask(task.id, column.id)} title="Delete">🗑️</button>
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <button onClick={() => openModal(task)} title="Edit" className="bg-transparent border-none text-[0.9rem] cursor-pointer p-1 rounded hover:bg-white/10">✏️</button>
+                      <button onClick={() => handleDeleteTask(task.id, column.id)} title="Delete" className="bg-transparent border-none text-[0.9rem] cursor-pointer p-1 rounded hover:bg-white/10">🗑️</button>
                     </div>
                   </div>
-                  <h3 className="task-title">{task.title}</h3>
+                  <h3 className="text-[0.95rem] font-semibold mb-2 leading-relaxed">{task.title}</h3>
                   {task.description && (
-                    <p className="task-description">{task.description}</p>
+                    <p className="text-[0.85rem] text-text-secondary mb-3 leading-relaxed">{task.description}</p>
                   )}
                   {task.dueDate && (
-                    <div className="task-due">
+                    <div className="text-[0.8rem] text-text-secondary flex items-center gap-1.5">
                       📅 {new Date(task.dueDate).toLocaleDateString()}
                     </div>
                   )}
                 </div>
               ))}
               {tasks[column.id].length === 0 && (
-                <div className="empty-column">
+                <div className="flex-1 flex items-center justify-center text-text-secondary text-[0.9rem] border-2 border-dashed border-border rounded-lg my-2">
                   Drop tasks here
                 </div>
               )}
@@ -341,15 +339,15 @@ function App() {
 
       {/* Task Modal */}
       {isModalOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>{editingTask ? 'Edit Task' : 'New Task'}</h2>
-              <button className="modal-close" onClick={closeModal}>×</button>
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-[4px] flex items-center justify-center z-[1000] p-5 animate-[fadeIn_0.2s_ease]" onClick={closeModal}>
+          <div className="bg-bg-secondary border border-border rounded-2xl w-full max-w-[500px] shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-[slideUp_0.3s_ease]" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center py-5 px-6 border-b border-border">
+              <h2 className="text-xl font-semibold">{editingTask ? 'Edit Task' : 'New Task'}</h2>
+              <button className="bg-transparent border-none text-text-secondary text-3xl cursor-pointer leading-none transition-colors duration-200 hover:text-text-primary" onClick={closeModal}>×</button>
             </div>
-            <form onSubmit={handleSaveTask} className="modal-form">
-              <div className="form-group">
-                <label>Title</label>
+            <form onSubmit={handleSaveTask} className="p-6 flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <label className="text-[0.85rem] font-medium text-text-secondary">Title</label>
                 <input
                   type="text"
                   value={taskForm.title}
@@ -357,43 +355,47 @@ function App() {
                   placeholder="What needs to be done?"
                   required
                   autoFocus
+                  className="w-full py-3.5 px-4 bg-black/30 border border-border rounded-lg text-text-primary text-base font-[inherit] transition-all duration-300 focus:outline-none focus:border-accent-blue focus:shadow-[0_0_0_3px_rgba(99,102,241,0.2)] placeholder:text-white/30"
                 />
               </div>
-              <div className="form-group">
-                <label>Description</label>
+              <div className="flex flex-col gap-2">
+                <label className="text-[0.85rem] font-medium text-text-secondary">Description</label>
                 <textarea
                   value={taskForm.description}
                   onChange={(e) => setTaskForm(p => ({ ...p, description: e.target.value }))}
                   placeholder="Add more details..."
                   rows={3}
+                  className="w-full py-3.5 px-4 bg-black/30 border border-border rounded-lg text-text-primary text-base font-[inherit] transition-all duration-300 focus:outline-none focus:border-accent-blue focus:shadow-[0_0_0_3px_rgba(99,102,241,0.2)] placeholder:text-white/30"
                 />
               </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Priority</label>
+              <div className="grid grid-cols-2 max-md:grid-cols-1 gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.85rem] font-medium text-text-secondary">Priority</label>
                   <select
                     value={taskForm.priority}
                     onChange={(e) => setTaskForm(p => ({ ...p, priority: e.target.value }))}
+                    className="w-full py-3.5 px-4 bg-black/30 border border-border rounded-lg text-text-primary text-base font-[inherit] transition-all duration-300 focus:outline-none focus:border-accent-blue focus:shadow-[0_0_0_3px_rgba(99,102,241,0.2)]"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label>Due Date</label>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[0.85rem] font-medium text-text-secondary">Due Date</label>
                   <input
                     type="date"
                     value={taskForm.dueDate}
                     onChange={(e) => setTaskForm(p => ({ ...p, dueDate: e.target.value }))}
+                    className="w-full py-3.5 px-4 bg-black/30 border border-border rounded-lg text-text-primary text-base font-[inherit] transition-all duration-300 focus:outline-none focus:border-accent-blue focus:shadow-[0_0_0_3px_rgba(99,102,241,0.2)]"
                   />
                 </div>
               </div>
-              <div className="modal-actions">
-                <button type="button" className="btn-cancel" onClick={closeModal}>
+              <div className="flex gap-3 justify-end pt-2">
+                <button type="button" className="py-3 px-6 bg-transparent border border-border rounded-lg text-text-secondary text-[0.9rem] font-medium cursor-pointer transition-all duration-200 hover:bg-white/5 hover:text-text-primary" onClick={closeModal}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-save">
+                <button type="submit" className="py-3 px-6 gradient-btn border-none rounded-lg text-white text-[0.9rem] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(99,102,241,0.4)]">
                   {editingTask ? 'Update Task' : 'Create Task'}
                 </button>
               </div>
