@@ -282,11 +282,11 @@ function App() {
       </header>
 
       {/* Kanban Board */}
-      <main className="grid grid-cols-3 max-md:grid-cols-1 gap-6 p-8 max-md:p-4 flex-1 overflow-x-auto">
+      <main className="grid grid-cols-3 max-md:grid-cols-1 gap-6 p-8 max-md:p-4 flex-1 overflow-hidden">
         {columns.map(column => (
           <div
             key={column.id}
-            className="bg-bg-glass backdrop-blur-[10px] border border-border rounded-2xl flex flex-col min-h-[400px] max-md:min-h-[300px]"
+            className="bg-bg-glass backdrop-blur-[10px] border border-border rounded-2xl flex flex-col min-h-[400px] max-md:min-h-[300px] min-w-0"
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(column.id)}
           >
