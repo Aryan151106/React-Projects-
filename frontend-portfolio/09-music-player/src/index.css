@@ -1,12 +1,326 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap');
 
-@layer base {
-  body {
-    margin: 0;
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+:root {
+  --bg-cream: #fff8ef;
+  --bg-peach: #ffd6a6;
+  --bg-sand: #ffedd1;
+  --ink-main: #261b12;
+  --ink-soft: #73513a;
+  --card: #fffdf8;
+  --line: #e3c6a6;
+  --accent: #ff6a3d;
+  --accent-strong: #d84f29;
+  --accent-soft: #ffd5c8;
+  --shadow: 0 22px 45px rgba(169, 96, 58, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Sora', 'Segoe UI', sans-serif;
+  color: var(--ink-main);
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 198, 125, 0.65) 0%, transparent 45%),
+    radial-gradient(circle at 87% 14%, rgba(255, 170, 132, 0.55) 0%, transparent 43%),
+    linear-gradient(165deg, var(--bg-cream) 0%, var(--bg-sand) 66%, #ffe4c0 100%);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  width: min(1140px, 94vw);
+  margin: 0 auto;
+  padding: 2.2rem 0 2rem;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.app-header h1 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.8rem, 3.7vw, 2.8rem);
+  letter-spacing: -0.03em;
+}
+
+.app-header > p {
+  margin: 0;
+  max-width: 330px;
+  color: var(--ink-soft);
+  text-align: right;
+  line-height: 1.45;
+}
+
+.layout-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1.08fr 0.92fr;
+}
+
+.player-card,
+.playlist-card {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 250, 243, 0.94));
+  box-shadow: var(--shadow);
+}
+
+.player-card {
+  padding: 1rem;
+  display: grid;
+  gap: 0.95rem;
+  align-content: start;
+}
+
+.cover-wrap {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.cover-image {
+  width: 100%;
+  height: min(47vh, 440px);
+  object-fit: cover;
+  display: block;
+}
+
+.cover-glow {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(50, 22, 8, 0.62), transparent);
+}
+
+.floating-badge {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.7rem;
+  margin: 0;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink-main);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.track-meta h2 {
+  margin: 0.2rem 0 0;
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  letter-spacing: -0.02em;
+}
+
+.track-meta p {
+  margin: 0.3rem 0 0;
+  color: var(--ink-soft);
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--ink-soft);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.controls {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.controls button {
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fff3e8;
+  color: var(--ink-main);
+  padding: 0.72rem 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.controls button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(168, 105, 72, 0.2);
+}
+
+.controls button.primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent) 0%, #ff9368 100%);
+  color: #fff;
+}
+
+.controls button.primary:hover {
+  background: linear-gradient(135deg, var(--accent-strong) 0%, #ff7a4c 100%);
+}
+
+.volume-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.playlist-card {
+  padding: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.playlist-head {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.playlist-head h2 {
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.playlist-head input {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fffdf9;
+  color: var(--ink-main);
+  padding: 0.62rem 0.74rem;
+  font: inherit;
+}
+
+.playlist-head input:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: #efaf95;
+}
+
+.track-list {
+  display: grid;
+  gap: 0.55rem;
+  max-height: 72vh;
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+
+.track-item {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: #fff8ee;
+  display: grid;
+  grid-template-columns: 62px 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.4rem;
+  color: var(--ink-main);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.track-item:hover {
+  transform: translateY(-1px);
+}
+
+.track-item img {
+  width: 62px;
+  height: 62px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.track-item strong,
+.track-item small,
+.track-item em {
+  display: block;
+}
+
+.track-item strong {
+  font-size: 0.93rem;
+}
+
+.track-item small {
+  margin-top: 0.22rem;
+  color: var(--ink-soft);
+}
+
+.track-item em {
+  font-style: normal;
+  color: var(--ink-soft);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.79rem;
+}
+
+.track-item.active {
+  border-color: #efaf95;
+  background: #ffe9db;
+}
+
+.empty-state {
+  margin: 0.35rem 0;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 940px) {
+  .app-shell {
+    padding-top: 1.2rem;
   }
 
-  * {
-    box-sizing: border-box;
+  .app-header {
+    align-items: start;
+    flex-direction: column;
+    margin-bottom: 0.75rem;
+  }
+
+  .app-header > p {
+    max-width: none;
+    text-align: left;
+  }
+
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cover-image {
+    height: 300px;
+  }
+
+  .track-list {
+    max-height: none;
   }
 }
