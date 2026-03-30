@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const API_BASE = 'https://www.themealdb.com/api/json/v1/1';
 
@@ -72,6 +72,38 @@ function getIngredientThumb(name, size) {
   return `https://www.themealdb.com/images/ingredients/${slug}-${size}.png`;
 }
 
+async function hydrateMealsWithLookup(meals) {
+  if (!Array.isArray(meals) || meals.length === 0) {
+    return [];
+  }
+
+  const hydratedMeals = await Promise.all(
+    meals.map(async (meal) => {
+      const hasFullDetails = Boolean(
+        meal?.strInstructions && meal?.strCategory && meal?.strArea && meal?.strIngredient1
+      );
+
+      if (hasFullDetails || !meal?.idMeal) {
+        return meal;
+      }
+
+      try {
+        const detailResponse = await fetch(`${API_BASE}/lookup.php?i=${encodeURIComponent(meal.idMeal)}`);
+        if (!detailResponse.ok) {
+          return meal;
+        }
+
+        const detailData = await detailResponse.json();
+        return detailData?.meals?.[0] || meal;
+      } catch {
+        return meal;
+      }
+    })
+  );
+
+  return hydratedMeals;
+}
+
 export default function App() {
   const [mode, setMode] = useState('name');
   const [queryInput, setQueryInput] = useState('Arrabiata');
@@ -103,7 +135,9 @@ export default function App() {
       }
 
       const data = await response.json();
-      const nextRecipes = (data.meals || []).map(normalizeMeal);
+      const meals = data.meals || [];
+      const enrichedMeals = await hydrateMealsWithLookup(meals);
+      const nextRecipes = enrichedMeals.map(normalizeMeal);
       setRecipes(nextRecipes);
     } catch (fetchError) {
       setRecipes([]);

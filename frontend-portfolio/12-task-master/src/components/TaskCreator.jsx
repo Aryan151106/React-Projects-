@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useUserStore } from '../store/userStore'
 import { Plus, Target, Flame, Crown, Clock, Zap, CheckCircle } from 'lucide-react'
 
 const DIFFICULTY_OPTIONS = [
@@ -89,8 +88,6 @@ export default function TaskCreator({ onCreateTask, squadMembers = [] }) {
       </button>
     )
   }
-
-  const { player } = useUserStore()
   const todayStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
   return (
